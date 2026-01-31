@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UX Estimate Calculator</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>UX Estimate Calculator</h1>
+      <p class="subtitle">Plan your UX project scope, timeline, and budget</p>
+    </header>
+
+    <main class="calculator">
+      <!-- Quick Start Templates -->
+      <section class="card templates-card">
+        <div class="card-header">
+          <h2>Quick Start</h2>
+          <span class="selected-template" id="selectedTemplate"></span>
+        </div>
+        <div class="card-content">
+          <p class="section-description">Start with a template based on your project type, then customize.</p>
+          <div class="template-buttons">
+            <button type="button" class="template-btn" data-template="mobile-mvp">
+              <span class="template-icon">📱</span>
+              <span class="template-name">Mobile App MVP</span>
+              <span class="template-desc">Lean research, focused design</span>
+            </button>
+            <button type="button" class="template-btn" data-template="website-redesign">
+              <span class="template-icon">🖥️</span>
+              <span class="template-name">Website Redesign</span>
+              <span class="template-desc">Moderate research, multiple concepts</span>
+            </button>
+            <button type="button" class="template-btn" data-template="design-system">
+              <span class="template-icon">🎨</span>
+              <span class="template-name">Design System</span>
+              <span class="template-desc">Heavy IA, documentation focus</span>
+            </button>
+            <button type="button" class="template-btn" data-template="research-sprint">
+              <span class="template-icon">🔬</span>
+              <span class="template-name">Research Sprint</span>
+              <span class="template-desc">Research-heavy, minimal design</span>
+            </button>
+            <button type="button" class="template-btn" data-template="usability-audit">
+              <span class="template-icon">✅</span>
+              <span class="template-name">Usability Audit</span>
+              <span class="template-desc">Testing focus, recommendations</span>
+            </button>
+            <button type="button" class="template-btn" data-template="clear">
+              <span class="template-icon">🔄</span>
+              <span class="template-name">Start Fresh</span>
+              <span class="template-desc">Clear all values</span>
+            </button>
+          </div>
+          <button type="button" class="jump-to-summary" id="jumpToSummary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6"/>
+            </svg>
+            Jump to Summary
+          </button>
+        </div>
+      </section>
+
+      <!-- Suggestions Panel -->
+      <div class="insights-panel" id="insightsPanel">
+        <div class="insights-header">
+          <span class="insights-icon">💡</span>
+          <span class="insights-title">Suggestions</span>
+        </div>
+        <ul class="insights-list" id="insightsList">
+          <li class="insight-item">Fill in your estimate to get personalized tips</li>
+        </ul>
+      </div>
+
+      <!-- General Project Info -->
+      <section class="card" data-section="general">
+        <div class="card-header collapsible" onclick="toggleSection(this)">
+          <div class="card-header-left">
+            <h2>General Project Info</h2>
+          </div>
+          <div class="card-header-right">
+            <span class="section-number">1</span>
+            <button type="button" class="collapse-toggle" aria-label="Toggle section">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m6 9 6 6 6-6"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="projectName">Project Name</label>
+              <input type="text" id="projectName" placeholder="e.g., Mobile App Redesign">
+            </div>
+            <div class="form-group">
+              <label for="startDate">Start Date</label>
+              <input type="date" id="startDate">
+            </div>
+            <div class="form-group">
+              <label for="hourlyRate">Hourly Rate</label>
+              <input type="number" id="hourlyRate" min="0" step="1" value="100">
+            </div>
+            <div class="form-group">
+              <label for="currency">Currency</label>
+              <select id="currency">
+                <option value="USD">USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="SEK">SEK (kr)</option>
+                <option value="GBP">GBP (£)</option>
+                <option value="NOK">NOK (kr)</option>
+                <option value="DKK">DKK (kr)</option>
+                <option value="CAD">CAD ($)</option>
+                <option value="AUD">AUD ($)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Research Phase -->
+      <section class="card" data-section="research">
+        <div class="card-header collapsible" onclick="toggleSection(this)">
+          <div class="card-header-left">
+            <h2>Research Phase</h2>
+          </div>
+          <div class="card-header-right">
+            <span class="section-number">2</span>
+            <button type="button" class="collapse-toggle" aria-label="Toggle section">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m6 9 6 6 6-6"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="card-content">
+          <p class="section-description">Discover user and business needs through research activities.</p>
+
+          <div class="form-group full-width">
+            <label for="researchPlanHours">Research Plan</label>
+            <div class="input-with-unit">
+              <input type="number" id="researchPlanHours" min="0" value="0">
+              <span class="unit">hours</span>
+            </div>
+          </div>
+
+          <div class="activity-group">
+            <h3>Stakeholder Interviews</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="stakeholderCount">Number of interviews</label>
+                <input type="number" id="stakeholderCount" min="0" value="0">
+                <span class="benchmark">Typical: 3-8 interviews</span>
+              </div>
+              <div class="form-group">
+                <label for="stakeholderHours">Hours per interview</label>
+                <input type="number" id="stakeholderHours" min="0" step="0.5" value="2">
+                <span class="benchmark">Typical: 1.5-3 hrs</span>
+              </div>
+              <div class="subtotal">
+                <span class="subtotal-label">Subtotal:</span>
+                <span class="subtotal-value" id="stakeholderSubtotal">0 hrs</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="activity-group">
+            <h3>User Interviews</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="userInterviewCount">Number of interviews</label>
+                <input type="number" id="userInterviewCount" min="0" value="0">
+                <span class="benchmark">Typical: 5-12 interviews</span>
+              </div>
+              <div class="form-group">
+                <label for="userInterviewHours">Hours per interview</label>
+                <input type="number" id="userInterviewHours" min="0" step="0.5" value="2">
+                <span class="benchmark">Typical: 1.5-2.5 hrs</span>
+              </div>
+              <div class="subtotal">
+                <span class="subtotal-label">Subtotal:</span>
+                <span class="subtotal-value" id="userInterviewSubtotal">0 hrs</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="activity-group">
+            <h3>Personas</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="personaCount">Number of personas</label>
+                <input type="number" id="personaCount" min="0" value="0">
+                <span class="benchmark">Typical: 2-5 personas</span>
+              </div>
+              <div class="form-group">
+                <label for="personaHours">Hours per persona</label>
+                <input type="number" id="personaHours" min="0" step="0.5" value="4">
+                <span class="benchmark">Typical: 3-8 hrs</span>
+              </div>
+              <div class="subtotal">
+                <span class="subtotal-label">Subtotal:</span>
+                <span class="subtotal-value" id="personaSubtotal">0 hrs</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="activity-group">
+            <h3>User Journey Maps</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="journeyMapCount">Number of journey maps</label>
+                <input type="number" id="journeyMapCount" min="0" value="0">
+                <span class="benchmark">Typical: 1-4 maps</span>
+              </div>
+              <div class="form-group">
+                <label for="journeyMapHours">Hours per map</label>
+                <input type="number" id="journeyMapHours" min="0" step="0.5" value="6">
+                <span class="benchmark">Typical: 4-12 hrs</span>
+              </div>
+              <div class="subtotal">
+                <span class="subtotal-label">Subtotal:</span>
+                <span class="subtotal-value" id="journeyMapSubtotal">0 hrs</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-total">
+            <span>Research Phase Total:</span>
+            <span id="researchTotal" class="total-value">0 hours</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Solution Design Phase -->
+      <section class="card" data-section="design">
+        <div class="card-header collapsible" onclick="toggleSection(this)">
+          <div class="card-header-left">
+            <h2>Solution Design</h2>
+          </div>
+          <div class="card-header-right">
+            <span class="section-number">3</span>
+            <button type="button" class="collapse-toggle" aria-label="Toggle section">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m6 9 6 6 6-6"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="card-content">
+          <p class="section-description">Create and validate design solutions.</p>
+
+          <div class="form-row two-col">
+            <div class="form-group">
+              <label for="uxVisionHours">UX Vision</label>
+              <div class="input-with-unit">
+                <input type="number" id="uxVisionHours" min="0" value="0">
+                <span class="unit">hours</span>
+              </div>
+              <span class="benchmark">Typical: 4-16 hrs</span>
+            </div>
+            <div class="form-group">
+              <label for="iaHours">Information Architecture</label>
+              <div class="input-with-unit">
+                <input type="number" id="iaHours" min="0" value="0">
+                <span class="unit">hours</span>
+              </div>
+              <span class="benchmark">Typical: 8-40 hrs</span>
+            </div>
+          </div>
+
+          <div class="activity-group">
+            <h3>Design Concepts</h3>
+            <div class="form-row three-col">
+              <div class="form-group">
+                <label for="conceptCount">Number of concepts</label>
+                <input type="number" id="conceptCount" min="0" value="0">
+                <span class="benchmark">Typical: 2-4 concepts</span>
+              </div>
+              <div class="form-group">
+                <label for="revisionCount">Revisions per concept</label>
+                <input type="number" id="revisionCount" min="0" value="2">
+                <span class="benchmark">Typical: 2-4 rounds</span>
+              </div>
+              <div class="form-group">
+                <label for="revisionHours">Hours per revision</label>
+                <input type="number" id="revisionHours" min="0" step="0.5" value="4">
+                <span class="benchmark">Typical: 2-6 hrs</span>
+              </div>
+            </div>
+            <div class="subtotal">
+              <span class="subtotal-label">Subtotal:</span>
+              <span class="subtotal-value" id="conceptSubtotal">0 hrs</span>
+            </div>
+          </div>
+
+          <div class="activity-group">
+            <h3>Usability Testing</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="usabilityTestCount">Number of tests</label>
+                <input type="number" id="usabilityTestCount" min="0" value="0">
+                <span class="benchmark">Typical: 5-8 tests per round</span>
+              </div>
+              <div class="form-group">
+                <label for="usabilityTestHours">Hours per test</label>
+                <input type="number" id="usabilityTestHours" min="0" step="0.5" value="3">
+                <span class="benchmark">Typical: 2-4 hrs</span>
+              </div>
+              <div class="subtotal">
+                <span class="subtotal-label">Subtotal:</span>
+                <span class="subtotal-value" id="usabilitySubtotal">0 hrs</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-total">
+            <span>Design Phase Total:</span>
+            <span id="designTotal" class="total-value">0 hours</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Additional Considerations -->
+      <section class="card" data-section="additional">
+        <div class="card-header collapsible" onclick="toggleSection(this)">
+          <div class="card-header-left">
+            <h2>Additional Time</h2>
+          </div>
+          <div class="card-header-right">
+            <span class="section-number">4</span>
+            <button type="button" class="collapse-toggle" aria-label="Toggle section">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m6 9 6 6 6-6"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="card-content">
+          <p class="section-description">Account for documentation, meetings, and uncertainty.</p>
+
+          <div class="form-row two-col">
+            <div class="form-group">
+              <label for="documentationHours">Documentation & Summary</label>
+              <div class="input-with-unit">
+                <input type="number" id="documentationHours" min="0" value="0">
+                <span class="unit">hours</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="meetingHours">Meetings & Communication</label>
+              <div class="input-with-unit">
+                <input type="number" id="meetingHours" min="0" value="0">
+                <span class="unit">hours</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="bufferPercent">Buffer / Padding</label>
+            <p class="field-hint">Add extra time for unexpected work and uncertainty</p>
+            <div class="buffer-selector">
+              <label class="buffer-option">
+                <input type="radio" name="buffer" value="0" checked>
+                <span>0%</span>
+              </label>
+              <label class="buffer-option">
+                <input type="radio" name="buffer" value="5">
+                <span>5%</span>
+              </label>
+              <label class="buffer-option">
+                <input type="radio" name="buffer" value="10">
+                <span>10%</span>
+              </label>
+              <label class="buffer-option">
+                <input type="radio" name="buffer" value="15">
+                <span>15%</span>
+              </label>
+              <label class="buffer-option">
+                <input type="radio" name="buffer" value="20">
+                <span>20%</span>
+              </label>
+              <label class="buffer-option">
+                <input type="radio" name="buffer" value="25">
+                <span>25%</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="section-total">
+            <span>Additional Time Total:</span>
+            <span id="additionalTotal" class="total-value">0 hours</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Results Summary -->
+      <section class="card results-card" id="summarySection">
+        <div class="card-header">
+          <h2>Project Estimate</h2>
+        </div>
+        <div class="card-content">
+          <div class="project-name-display" id="projectNameDisplay">Your UX Project</div>
+
+          <div class="results-breakdown">
+            <div class="breakdown-item">
+              <span class="breakdown-label">Research Phase</span>
+              <span class="breakdown-value" id="researchResult">0 hrs</span>
+            </div>
+            <div class="breakdown-item">
+              <span class="breakdown-label">Design Phase</span>
+              <span class="breakdown-value" id="designResult">0 hrs</span>
+            </div>
+            <div class="breakdown-item">
+              <span class="breakdown-label">Additional Time</span>
+              <span class="breakdown-value" id="additionalResult">0 hrs</span>
+            </div>
+            <div class="breakdown-item buffer-item">
+              <span class="breakdown-label">Buffer (<span id="bufferPercentDisplay">0</span>%)</span>
+              <span class="breakdown-value" id="bufferResult">0 hrs</span>
+            </div>
+          </div>
+
+          <div class="results-totals">
+            <div class="total-row">
+              <span class="total-label">Total Hours</span>
+              <span class="total-value-large" id="totalHours">0</span>
+            </div>
+            <div class="total-row highlight">
+              <span class="total-label">Total Cost</span>
+              <span class="total-value-large" id="totalCost">$0</span>
+            </div>
+          </div>
+
+          <div class="timeline-info">
+            <div class="timeline-item">
+              <span class="timeline-label">Working Days</span>
+              <span class="timeline-value" id="workingDays">0 days</span>
+              <span class="timeline-hint">(8 hrs/day)</span>
+            </div>
+            <div class="timeline-item">
+              <span class="timeline-label">Estimated Completion</span>
+              <span class="timeline-value" id="completionDate">—</span>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button type="button" class="print-btn" onclick="window.print()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                <rect x="6" y="14" width="12" height="8"></rect>
+              </svg>
+              Print Estimate
+            </button>
+            <button type="button" class="export-ai-btn" id="exportAiBtn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3v12"></path>
+                <path d="m8 11 4 4 4-4"></path>
+                <path d="M8 5H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-4"></path>
+              </svg>
+              Copy for AI Review
+            </button>
+          </div>
+          <p class="export-hint" id="exportHint"></p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="disclaimer">
+        <p><strong>Disclaimer:</strong> These are all estimates based on current knowledge. Estimates might need to be revisited if circumstances around the project change. Estimates are not promises, they are rough indications on how long things likely will take. On top of that, lead time usually gets added (e.g. waiting for feedback, meetings, or similar).</p>
+      </div>
+      <p>Created by <a href="https://andreasjohanssonux.netlify.app/" target="_blank">Andreas Johansson</a></p>
+      <p class="footer-note">Time estimates informed by <a href="https://www.nngroup.com/articles/ux-research-cheat-sheet/" target="_blank">Nielsen Norman Group</a>, <a href="https://www.nngroup.com/articles/why-you-only-need-to-test-with-5-users/" target="_blank">usability testing research</a>, and professional UX practice.</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
