@@ -354,10 +354,13 @@ function generateInsights() {
 // Update insights display
 function updateInsights() {
   const insights = generateInsights();
-  elements.insightsList.innerHTML = insights.map(insight => {
-    const className = insight.type === 'warning' ? 'insight-item warning' : 'insight-item';
-    return `<li class="${className}">${insight.text}</li>`;
-  }).join('');
+  elements.insightsList.textContent = '';
+  insights.forEach(insight => {
+    const li = document.createElement('li');
+    li.className = insight.type === 'warning' ? 'insight-item warning' : 'insight-item';
+    li.textContent = insight.text;
+    elements.insightsList.appendChild(li);
+  });
 }
 
 // Main calculation function
@@ -638,6 +641,18 @@ function initEventListeners() {
       applyTemplate(templateKey);
     });
   });
+
+  // Collapsible section headers
+  const collapsibleHeaders = document.querySelectorAll('[data-collapsible]');
+  collapsibleHeaders.forEach(header => {
+    header.addEventListener('click', () => toggleSection(header));
+  });
+
+  // Print button
+  const printBtn = document.getElementById('printBtn');
+  if (printBtn) {
+    printBtn.addEventListener('click', () => window.print());
+  }
 
   // Export button
   if (elements.exportAiBtn) {
